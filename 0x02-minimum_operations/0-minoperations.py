@@ -5,39 +5,25 @@ method that calculates the fewest number of operations needed
 
 
 def minOperations(n):
-    """
-    Calculate the minimum number of operations needed to achieve
-    a given number of H characters.
-
-    Parameters:
-    - n (int): The target number of H characters.
-
-    Returns:
-    - int: The minimum number of operations.
-    If n is impossible to achieve, return 0.
-    """
     if n <= 1:
-        return 0
+        return n
 
-    i = 2
-    count = 0
+    # Initialize an array to store the minimum operations needed for each index
+    dp = [float('inf')] * (n + 1)
 
-    while i <= n:
-        if n % i == 0:
-            count += i
-            n /= i
-        else:
-            i += 1
+    # Base case: 0 operations needed to reach 1 character
+    dp[1] = 0
 
-    return count
+    for i in range(2, n + 1):
+        for j in range(1, i):
+            if i % j == 0:  # Check if i is divisible by j
+                dp[i] = min(dp[i], dp[j] + i // j)
 
+    return dp[n] if dp[n] != float('inf') else 0
 
-if __name__ == '__main__':
-    n = 4
-    print("Min # of operations to reach {} characters: {}"
-          .format(n, minOperations(n)))
+# Example usage:
+n = 4
+print("Min number of operations to reach {} characters: {}".format(n, minOperations(n)))
 
-    n = 12
-    print("Min # of operations to reach {} characters: {}"
-          .format(n, minOperations(n)))
-    
+n = 12
+print("Min number of operations to reach {} characters: {}".format(n, minOperations(n)))
